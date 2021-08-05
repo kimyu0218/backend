@@ -1,0 +1,33 @@
+package com.example.backend.dto;
+
+public class Route {
+    private Double latitude;
+    private Double longitude;
+    private int emergencyCarId;
+    private int nodeId;
+
+    public Double getLatitude() {
+        return latitude;
+    }
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+    public Double getLongitude() {
+        return longitude;
+    }
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+    public int getEmergencyCarId() {
+        return emergencyCarId;
+    }
+    public void setEmergencyCarId(int emergencyCarId) {
+        this.emergencyCarId = emergencyCarId;
+    }
+    public int getNodeId() {
+        return nodeId;
+    }
+    public void setNodeId(int nodeId) {
+        this.nodeId = nodeId;
+    }
+}
