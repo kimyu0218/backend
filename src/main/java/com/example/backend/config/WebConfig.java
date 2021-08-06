@@ -8,4 +8,8 @@ import org.springframework.web.servlet.config.annotation.*;
 @EnableWebMvc
 @ComponentScan(basePackages = {"com.example.backend.controller"}) // 하위 패키지 내부의 컴포넌트 스캔
 public class WebConfig implements WebMvcConfigurer{
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/api/**").allowCredentials(true).allowedOrigins("http://localhost:3000");
+    }
 }
