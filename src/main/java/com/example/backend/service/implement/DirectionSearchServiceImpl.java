@@ -162,7 +162,7 @@ public class DirectionSearchServiceImpl {
     }
 
     // 길찾기
-    public void findRoute(double src_longitude, double src_latitude, double dst_longitude, double dst_latitude) throws IOException, ParseException {
+    public double[][] findRoute(int auth, double src_longitude, double src_latitude, double dst_longitude, double dst_latitude) throws IOException, ParseException {
 
         String urlSrcDst = "?start=" + src_longitude + "," + src_latitude + "&goal=" + dst_longitude + "," + dst_latitude; // 출발지 및 도착지
         String urlWayPoints[] = new String[3]; // 경유지
@@ -247,21 +247,23 @@ public class DirectionSearchServiceImpl {
         for(int i = 0; i < path[minIndex].length; i++)
         	System.out.println("-> " + path[minIndex][i][1] + ", " + path[minIndex][i][0]);
         */
-
-        int node_cnt = 0;
-        // 경로 db에 저장
-        Route element = new Route();
-        element.setEmergencyCarId(1); // ==== 일단 임의로 1로 설정 ====
-        element.setLatitude(start_loc[1]);
-        element.setLongitude(start_loc[0]); // 경로 시작점
-        element.setNodeId(node_cnt++);
-        routeDao.insertRoute(element);
-
-        for (int i = 0; i < path[minIndex].length; i++) {
-            element.setLatitude(path[minIndex][i][1]);
-            element.setLongitude(path[minIndex][i][0]);
+        if(auth==1) {
+            int node_cnt = 0;
+            // 경로 db에 저장
+            Route element = new Route();
+            element.setEmergencyCarId(1); // ==== 일단 임의로 1로 설정 ====
+            element.setLatitude(start_loc[1]);
+            element.setLongitude(start_loc[0]); // 경로 시작점
             element.setNodeId(node_cnt++);
             routeDao.insertRoute(element);
+
+            for (int i = 0; i < path[minIndex].length; i++) {
+                element.setLatitude(path[minIndex][i][1]);
+                element.setLongitude(path[minIndex][i][0]);
+                element.setNodeId(node_cnt++);
+                routeDao.insertRoute(element);
+            }
         }
+        return path[minIndex];
     }
 }
