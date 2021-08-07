@@ -2,6 +2,7 @@ package com.example.backend.controller;
 
 import com.example.backend.dao.RouteDao;
 import com.example.backend.dao.TrafficLightDao;
+import com.example.backend.etc.Form;
 import com.example.backend.service.DirectionSearchService;
 import com.example.backend.service.implement.DirectionSearchServiceImpl;
 import org.json.simple.parser.ParseException;
@@ -22,12 +23,9 @@ public class RestApiController {
     }
     
     @PostMapping("/")
-    public double[][] driver(@RequestParam("auth") int auth,
-                         @RequestParam("start_lat") double start_lat, @RequestParam("start_lng") double start_lng,
-                         @RequestParam("end_lat") double end_lat, @RequestParam("end_lng") double end_lng) throws IOException, ParseException {
-
-        if(auth == 1) System.out.println("Emergency Car..."); // (추후에 삭제)
+    public double[][] drive(Form form) throws IOException, ParseException {
+        if(form.getAuth() == 1) System.out.println("Emergency Car..."); // (추후에 삭제)
         else System.out.println("Driver...");
-        return directionSearchService.findRoute(auth, start_lng, start_lat, end_lng, end_lat); // (emergency_car 경로 db에 저장됨)
+        return directionSearchService.findRoute(form.getAuth(), form.getStart_lng(), form.getStart_lat(), form.getEnd_lng(), form.getStart_lat());
     }
 }
