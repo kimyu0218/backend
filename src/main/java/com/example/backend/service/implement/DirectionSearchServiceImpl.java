@@ -23,7 +23,6 @@ import com.example.backend.dao.TrafficLightDao;
 import com.example.backend.dto.Route;
 import com.example.backend.dto.TrafficLight;
 import com.example.backend.etc.Coordinate;
-import com.example.backend.service.DirectionSearchService;
 
 @Service
 public class DirectionSearchServiceImpl {
@@ -60,7 +59,7 @@ public class DirectionSearchServiceImpl {
             cur_time[k] = Integer.parseInt(cur_time_arr[k]);
 
         // DB에서 신호 등화 순서 & 신호 등화 시간 가져오기 (위도: path[i][j][1] / 경도: path[i][j][0])
-        //System.out.println(path[i][j][1] + "," + path[i][j][0]); //
+        // System.out.println(path[i][j][1] + "," + path[i][j][0]); //
         List<TrafficLight> traffic_list = trafficLightDao.getTrafficLight(path[i][j][1], path[i][j][0]);
         System.out.println(i + "-" + j + ":\t" + traffic_list.size() + "개의 신호등 정보를 찾았습니다."); // (신호등 정보 찾았는지 확인용)
 

@@ -1,10 +1,7 @@
 package com.example.backend.service;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
-import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import com.example.backend.etc.Coordinate;
