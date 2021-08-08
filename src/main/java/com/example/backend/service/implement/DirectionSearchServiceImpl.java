@@ -7,7 +7,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -212,6 +214,12 @@ public class DirectionSearchServiceImpl {
             analyzeJson(parser, i, content[i], path, point_value, start_loc, goal_loc);
         }
 
+        int max_size = -1;
+        for(int i = 0; i < 4; i++)
+            if(max_size < point_value[i].length) max_size = point_value[i].length;
+
+        int weight[][] = new int[4][max_size];
+
         // 어떤 경로가 가장 적절한 경로인가
         long minValue = Integer.MAX_VALUE;
         int minIndex = -1;
@@ -220,6 +228,7 @@ public class DirectionSearchServiceImpl {
             for (int j = 0; j < point_value[i].length; j++) {
                 cur_value += point_value[i][j];
                 cur_value += traffic_value(i, j, path, cur_value, start_loc, goal_loc);
+                weight[i][j] = (int) cur_value;
             }
             if (minValue > cur_value) {
                 minValue = cur_value;
@@ -235,6 +244,10 @@ public class DirectionSearchServiceImpl {
         	System.out.println("-> " + path[minIndex][i][1] + ", " + path[minIndex][i][0]);
         */
 
+        SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date());
+
         if(auth==1) { // 응급 차량 경로 db에 저장
             int node_cnt = 0;
             Route element = new Route();
@@ -242,12 +255,16 @@ public class DirectionSearchServiceImpl {
             element.setLatitude(start_loc[1]);
             element.setLongitude(start_loc[0]); // 경로 시작점
             element.setNodeId(node_cnt++);
+            element.setTime(format.format(cal.getTime()));
             routeDao.insertRoute(element);
 
             for (int i = 0; i < path[minIndex].length; i++) {
                 element.setLatitude(path[minIndex][i][1]);
                 element.setLongitude(path[minIndex][i][0]);
                 element.setNodeId(node_cnt++);
+                if(i == 0) cal.add(Calendar.MILLISECOND, weight[minIndex][i]);
+                else cal.add(Calendar.MILLISECOND, weight[minIndex][i] - weight[minIndex][i-1]);
+                element.setTime(format.format(cal.getTime()));
                 routeDao.insertRoute(element);
             }
         }

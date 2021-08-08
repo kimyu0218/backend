@@ -29,7 +29,7 @@ public class RouteDao {
     }
 
     // 1. 응급 차량 서비스
-    public int deleteRoute(int emergency_car_id, Date time) { // 특정 레코드 삭제
+    public int deleteRoute(int emergency_car_id, String time) { // 특정 레코드 삭제
         Map<String, Object> params = new HashMap<>();
         params.put("emergency_car_id", emergency_car_id);
         params.put("time", time);

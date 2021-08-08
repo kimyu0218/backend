@@ -7,7 +7,7 @@ public class Route {
     private Double longitude;
     private int emergencyCarId;
     private int nodeId;
-    private Date time;
+    private String time;
 
     public Double getLatitude() {
         return latitude;
@@ -31,8 +31,8 @@ public class Route {
     public void setNodeId(int nodeId) {
         this.nodeId = nodeId;
     }
-    public Date getTime() { return time; }
-    public void setTime(Date time) {
+    public String getTime() { return time; }
+    public void setTime(String time) {
         this.time = time;
     }
 
