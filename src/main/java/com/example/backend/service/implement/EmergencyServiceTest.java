@@ -4,13 +4,12 @@ import com.example.backend.config.ApplicationConfig;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-
-public class DriverServiceTest {
-    public static void main(String[] args) {
+public class EmergencyServiceTest {
+    public static void main(String[] args){
         ApplicationContext ac = new AnnotationConfigApplicationContext(ApplicationConfig.class);
-        DriverServiceImpl driverService = ac.getBean(DriverServiceImpl.class);
+        EmergencyServiceImpl emergencyService = ac.getBean(EmergencyServiceImpl.class);
 
-        // findClosetNode
-        driverService.findClosetNode();
+        // deletePassedNode
+        emergencyService.deletePassedNode(1);
     }
 }

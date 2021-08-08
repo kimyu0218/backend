@@ -17,7 +17,7 @@ public class DriverServiceImpl implements DriverService {
     private RouteDao routeDao;
 
     @Override
-    public void deletePassedNode() { // 예상 시각과 가장 유사한 노드 찾기
+    public void findClosetNode() { // 예상 시각과 가장 유사한 노드 찾기
         Timer timer = new Timer();
         TimerTask task = new TimerTask() {
             @Override
