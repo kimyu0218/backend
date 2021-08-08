@@ -25,6 +25,8 @@ public class DriverServiceImpl implements DriverService {
                 List<Route> list = routeDao.findClosestNode();
                 System.out.println(list);
                 // ===== 추후에 프론트엔드에 전송 필요 ====
+                // 현재 구현 상황: 5초 지나고 난 후에 예상 시각과 가장 유사한 노드 찾기
+                // 구현해야 하는 것: 5초마다 예상 시각과 가장 유사한 노드 찾기
             }
         };
         timer.schedule(task, 5000);
