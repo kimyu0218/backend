@@ -55,7 +55,7 @@ public class DirectionSearchServiceImpl {
         // (인덱스별 값 -> 0 : 시 / 1 : 분 / 2 : 초)
         String[] cur_time_arr = cur_time_str.split(":");
         int[] cur_time = new int[3];
-        for (int k=0;k<3;k++)
+        for (int k = 0; k < 3; k++)
             cur_time[k] = Integer.parseInt(cur_time_arr[k]);
 
         // DB에서 신호 등화 순서 & 신호 등화 시간 가져오기 (위도: path[i][j][1] / 경도: path[i][j][0])
@@ -177,7 +177,7 @@ public class DirectionSearchServiceImpl {
 
         // url 만들기
         String option1 = urlAddr + urlSrcDst + urlOption; // 경유지 없는 경우
-        String[] option2 = new String[3];                  // 경유지 있는 경우
+        String[] option2 = new String[3];                 // 경유지 있는 경우
         for (int i = 0; i < 3; i++)
             option2[i] = urlAddr + urlSrcDst + urlWayPoints[i] + urlOption;
 
@@ -199,10 +199,8 @@ public class DirectionSearchServiceImpl {
             int responseCode = con.getResponseCode(); // 응답코드
 
             BufferedReader br;
-            if (responseCode == 200) // 정상 호출
-                br = new BufferedReader(new InputStreamReader(con.getInputStream()));
-            else // 에러 발생
-                br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
+            if (responseCode == 200) br = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            else br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
 
             String inputLine;
             StringBuffer response = new StringBuffer();
@@ -213,15 +211,6 @@ public class DirectionSearchServiceImpl {
             content[i] = response.toString();
             analyzeJson(parser, i, content[i], path, point_value, start_loc, goal_loc);
         }
-
-        /* (동일한 경로인지 확인용)
-        boolean flag = false;
-        for (int i = 1; i < 4; i++){
-           if(content[0].equals(content[i])) flag = true;
-        }
-        if(flag) System.out.println("같은 경로");
-        else System.out.println("다른 경로");
-        */
 
         // 어떤 경로가 가장 적절한 경로인가
         long minValue = Integer.MAX_VALUE;
@@ -240,17 +229,16 @@ public class DirectionSearchServiceImpl {
         }
 
         System.out.println("\n" + minIndex + "번째 경로가 최소 가중치 " + minValue + "를 가진다.");
-
         /*  // 경로 출력용
         System.out.println(start_loc[1] + ", " + start_loc[0]);
         for(int i = 0; i < path[minIndex].length; i++)
         	System.out.println("-> " + path[minIndex][i][1] + ", " + path[minIndex][i][0]);
         */
-        if(auth==1) {
+
+        if(auth==1) { // 응급 차량 경로 db에 저장
             int node_cnt = 0;
-            // 경로 db에 저장
             Route element = new Route();
-            element.setEmergencyCarId(1); // ==== 일단 임의로 1로 설정 ====
+            element.setEmergencyCarId(1); // ==== 일단 임의로 1로 설정 ==== (새로운 응급 차량이 들어올 때마다 id ++ 하는 식으로 구현 필요)
             element.setLatitude(start_loc[1]);
             element.setLongitude(start_loc[0]); // 경로 시작점
             element.setNodeId(node_cnt++);
@@ -263,6 +251,6 @@ public class DirectionSearchServiceImpl {
                 routeDao.insertRoute(element);
             }
         }
-        return path[minIndex];
+        return path[minIndex]; // 최적 경로 반환
     }
 }
