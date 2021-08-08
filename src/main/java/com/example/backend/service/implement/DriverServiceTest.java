@@ -11,6 +11,6 @@ public class DriverServiceTest {
         DriverServiceImpl driverService = ac.getBean(DriverServiceImpl.class);
 
         // findClosetNode
-        driverService.findClosetNode();
+        driverService.run();
     }
 }

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Aspect // aop
 @Component
 public class TimeTraceAop {
-    @Around("execution(* com.example.backend.Controller*(..))")
+    //@Around("execution(* com.example.backend.controller*(..))") // 에러발생.. 오류 있는듯?
     public Object execute(ProceedingJoinPoint joinPoint) throws Throwable{
         long start = System.currentTimeMillis();
         try{

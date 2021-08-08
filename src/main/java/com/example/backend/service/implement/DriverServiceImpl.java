@@ -7,28 +7,31 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 @Service
-public class DriverServiceImpl implements DriverService {
+public class DriverServiceImpl implements DriverService, Runnable{
 
     @Autowired
     private RouteDao routeDao;
 
     @Override
-    public void findClosetNode() { // 예상 시각과 가장 유사한 노드 찾기
-        Timer timer = new Timer();
-        TimerTask task = new TimerTask() {
-            @Override
-            public void run() {
-                List<Route> list = routeDao.findClosestNode();
-                System.out.println(list);
-                // ===== 추후에 프론트엔드에 전송 필요 ====
-                // 현재 구현 상황: 5초 지나고 난 후에 예상 시각과 가장 유사한 노드 찾기
-                // 구현해야 하는 것: 5초마다 예상 시각과 가장 유사한 노드 찾기
+    public void findClosestNode() {
+        List<Route> list = routeDao.findClosestNode();
+        System.out.println(list);
+    }
+
+    @Override
+    public void run() {
+        boolean con = true;
+        while(con){
+            findClosestNode();
+            try{ // 필요에 따라 sleep 위치 변경하기
+                Thread.sleep(5000);
+            } catch(InterruptedException e){
+                System.out.println(e.getMessage());
             }
-        };
-        timer.schedule(task, 5000);
+            System.out.println("프론트엔드와 통신하기"); // ==== 프론트엔드와 통신 구현하기 ====
+            // 프론트엔드와 통신해서 continue 여부 결정하기
+        }
     }
 }

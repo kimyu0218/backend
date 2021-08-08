@@ -6,32 +6,35 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
 
 @Service
-public class EmergencyServiceImpl implements EmergencyService {
+public class EmergencyServiceImpl implements EmergencyService, Runnable {
+
     @Autowired
     RouteDao routeDao;
 
     @Override
     public void deletePassedNode(int emergency_car_id) { // 예상 시각 지나간 경우 노드 삭제
-        Timer timer = new Timer();
-        TimerTask task = new TimerTask() {
-            @Override
-            public void run() {
-                SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
-                String now = format.format(new Date());
+        SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
+        String now = format.format(new Date());
 
-                int deleteCount = routeDao.deleteRoute(emergency_car_id, now);
-                System.out.println(deleteCount + "개의 노드를 삭제했습니다.");
-                // ===== 추후에 프론트엔드에 전송 필요 ====
-                // 현재 구현 상황: 5초 지나고 난 후에 예상 시각을 지나간 노드 삭제하기
-                // 구현해야 하는 것: 5초마다 예상 시각을 지나간 노드 삭제하기
+        int deleteCount = routeDao.deleteRoute(emergency_car_id, now);
+        System.out.println(deleteCount + "개의 노드를 삭제했습니다.");
+    }
+
+    @Override
+    public void run() {
+        boolean con = true;
+        while(con){
+            deletePassedNode(1);
+            try{ // 필요에 따라 sleep 위치 변경하기
+                Thread.sleep(5000);
+            } catch(InterruptedException e){
+                System.out.println(e.getMessage());
             }
-        };
-        timer.schedule(task, 5000);
+            System.out.println("프론트엔드와 통신하기"); // ==== 프론트엔드와 통신 구현하기 ====
+            // 프론트엔드와 통신해서 continue 여부 결정하기
+        }
     }
 }

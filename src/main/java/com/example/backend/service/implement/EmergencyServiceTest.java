@@ -10,6 +10,8 @@ public class EmergencyServiceTest {
         EmergencyServiceImpl emergencyService = ac.getBean(EmergencyServiceImpl.class);
 
         // deletePassedNode
-        emergencyService.deletePassedNode(1);
+        emergencyService.run();
+        // emergencyCarId 임의로 1로 설정해놓은 상태
+        // 프론트랑 통신하면서 id 부여해서 설정하는 과정 필요
     }
 }
