@@ -18,21 +18,15 @@ public class DriverServiceImpl implements DriverService {
     private RouteDao routeDao;
 
     @Override
-    public Date computeTime() { // 현재 시각 계산하기
-        return new Date();
-    }
-
-    @Override
-    public void deletePassedNode(Date time) { // 예상 시각이 지난 노드 삭제
+    public void deletePassedNode(Date time) { // 예상 시각과 가장 유사한 노드 찾기
         while(true) {
             Timer timer = new Timer();
             TimerTask task = new TimerTask() {
                 @Override
                 public void run() {
-                    Date now = computeTime();
-                    List<Route> list = routeDao.findClosestNode(time);
+                    List<Route> list = routeDao.findClosestNode();
                     System.out.println(list);
-                    //System.out.println(deleteCount + "개 삭제");
+                    // ===== 추후에 프론트엔드에 전송 필요 ====
                 }
             };
             timer.schedule(task, 5000);

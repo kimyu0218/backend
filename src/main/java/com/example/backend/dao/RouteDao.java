@@ -48,9 +48,8 @@ public class RouteDao {
         return jdbc.queryForObject(IS_DB_EMPTY, Collections.emptyMap(), Integer.class);
     }
 
-    public List<Route> findClosestNode(Date time){
-        Map<String, Date> params = Collections.singletonMap("time", time);
-        return jdbc.query(SORT_BY_TIME, params, rowMapper);
+    public List<Route> findClosestNode(){
+        return jdbc.query(SORT_BY_TIME, new BeanPropertyRowMapper<>(Route.class));
     }
 
 }
