@@ -35,4 +35,15 @@ public class Route {
     public void setTime(Date time) {
         this.time = time;
     }
+
+    @Override
+    public String toString() {
+        return "Route{" +
+                "latitude=" + latitude +
+                ", longitude=" + longitude +
+                ", emergencyCarId=" + emergencyCarId +
+                ", nodeId=" + nodeId +
+                ", time=" + time +
+                '}';
+    }
 }

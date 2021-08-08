@@ -28,8 +28,8 @@ public class RouteDaoTest {
         // 2. delete by time
         int emergency_car_id = 1;
         Date currentTime = new Date();
-        int deleteCount = routeDao.deleteRoute(emergency_car_id, currentTime);
-        System.out.println(deleteCount + "개의 경로를 삭제했습니다.");
+        //int deleteCount = routeDao.deleteRoute(emergency_car_id, currentTime);
+        //System.out.println(deleteCount + "개의 경로를 삭제했습니다.");
 
         // 3. count
         int count = routeDao.isEmpty();
