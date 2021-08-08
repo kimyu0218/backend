@@ -4,7 +4,6 @@ import com.example.backend.config.ApplicationConfig;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import java.util.Date;
 
 public class DriverServiceTest {
     public static void main(String[] args) {
@@ -12,7 +11,6 @@ public class DriverServiceTest {
         DriverServiceImpl driverService = ac.getBean(DriverServiceImpl.class);
 
         // deletePassedNode
-        Date time = new Date();
-        driverService.deletePassedNode(time);
+        driverService.deletePassedNode();
     }
 }
