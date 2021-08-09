@@ -10,12 +10,10 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 @EnableWebMvc
 @ComponentScan(basePackages = {"com.example.backend.controller"}) // 하위 패키지 내부의 컴포넌트 스캔
 public class WebConfig implements WebMvcConfigurer{
-    /*
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOrigins("*")
                 .allowedMethods("GET", "POST");
     }
-    */
 }

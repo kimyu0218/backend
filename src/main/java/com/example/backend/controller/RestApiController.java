@@ -23,7 +23,7 @@ public class RestApiController {
     // 1. 폼 형태
     @PostMapping(value = "/api/drive")
     public double[][] drive(@ModelAttribute Form form) throws IOException, ParseException {
-        System.out.println("백엔드 연결");
+        //System.out.println("백엔드 연결");
         return directionSearchService.findRoute(form.getAuth(), form.getStart_lng(), form.getStart_lat(), form.getEnd_lng(), form.getStart_lat());
     }
 
@@ -32,7 +32,7 @@ public class RestApiController {
     public double[][] drive(@RequestParam ("auth") int auth,
                             @RequestParam("start_lat") double start_lat, @RequestParam("start_lng") double start_lng,
                             @RequestParam("end_lat") double end_lat, @RequestParam("end_lng") double end_lng) throws IOException, ParseException {
-        System.out.println("백엔드 연결");
+        //System.out.println("백엔드 연결");
         return directionSearchService.findRoute(auth, start_lng, start_lat, end_lng, end_lat);
     }
 }
