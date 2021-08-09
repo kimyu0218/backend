@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        // rest api 만들 때마다 여기에 추가
         http.authorizeRequests()
                 .antMatchers("/api/drive").permitAll()
                 .antMatchers("/api/driver").permitAll()
