@@ -48,8 +48,14 @@ public class RouteDao {
         return jdbc.queryForObject(IS_DB_EMPTY, Collections.emptyMap(), Integer.class);
     }
 
-    public List<Route> findClosestNode(){
-        return jdbc.query(SORT_BY_TIME, new BeanPropertyRowMapper<>(Route.class));
+    public Route findClosestNode(){
+        List<Route> list = jdbc.query(SORT_BY_TIME, new BeanPropertyRowMapper<>(Route.class));
+        Route route = new Route();
+        route.setLatitude(list.get(0).getLatitude());
+        route.setLongitude(list.get(0).getLongitude());
+        route.setEmergencyCarId(list.get(0).getEmergencyCarId());
+        route.setNodeId(list.get(0).getNodeId());
+        route.setTime(list.get(0).getTime());
+        return route;
     }
-
 }

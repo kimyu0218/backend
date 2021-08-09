@@ -16,7 +16,7 @@ public class EmergencyServiceImpl implements EmergencyService, Runnable {
 
     @Override
     public void deletePassedNode(int emergency_car_id) { // 예상 시각 지나간 경우 노드 삭제
-        SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String now = format.format(new Date());
 
         int deleteCount = routeDao.deleteRoute(emergency_car_id, now);
@@ -24,7 +24,7 @@ public class EmergencyServiceImpl implements EmergencyService, Runnable {
     }
 
     @Override
-    public void run() {
+    public void run() { // (불필요한 경우 추후에 삭제)
         boolean con = true;
         while(con){
             deletePassedNode(1);

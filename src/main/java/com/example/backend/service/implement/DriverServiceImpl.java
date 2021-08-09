@@ -2,11 +2,10 @@ package com.example.backend.service.implement;
 
 import com.example.backend.dao.RouteDao;
 import com.example.backend.dto.Route;
+import com.example.backend.etc.DriverForm;
 import com.example.backend.service.DriverService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class DriverServiceImpl implements DriverService, Runnable{
@@ -15,13 +14,18 @@ public class DriverServiceImpl implements DriverService, Runnable{
     private RouteDao routeDao;
 
     @Override
-    public void findClosestNode() {
-        List<Route> list = routeDao.findClosestNode();
-        System.out.println(list);
+    public DriverForm findClosestNode() { // 예상 시각과 가장 가까운 노드 정보 반환
+        Route node = routeDao.findClosestNode();
+        DriverForm form = new DriverForm();
+        form.setSuccess(true);
+        form.setLatitude(node.getLatitude());
+        form.setLongitude(node.getLongitude());
+        form.setTime(node.getTime());
+        return form;
     }
 
     @Override
-    public void run() {
+    public void run() { // (불필요한 경우 추후에 삭제)
         boolean con = true;
         while(con){
             findClosestNode();

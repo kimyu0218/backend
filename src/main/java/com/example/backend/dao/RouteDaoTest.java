@@ -14,7 +14,7 @@ public class RouteDaoTest {
     public static void main(String[] args) {
         ApplicationContext ac = new AnnotationConfigApplicationContext(ApplicationConfig.class);
         RouteDao routeDao = ac.getBean(RouteDao.class);
-        SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         // 1. insert
         Route route = new Route();
@@ -38,7 +38,7 @@ public class RouteDaoTest {
         System.out.println(count + "개의 레코드가 존재합니다.");
 
         // 4. sort by time
-        List<Route> routeList = routeDao.findClosestNode();
-        System.out.println(routeList);
+        Route route2 = routeDao.findClosestNode();
+        System.out.println(route2);
     }
 }

@@ -244,7 +244,7 @@ public class DirectionSearchServiceImpl {
         	System.out.println("-> " + path[minIndex][i][1] + ", " + path[minIndex][i][0]);
         */
 
-        SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
 

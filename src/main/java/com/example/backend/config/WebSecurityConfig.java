@@ -12,7 +12,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/api/drive").permitAll()
-                .antMatchers("/api/drive2").permitAll()
+                .antMatchers("/api/driver").permitAll()
+                .antMatchers("/api/emergency").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .csrf().disable();

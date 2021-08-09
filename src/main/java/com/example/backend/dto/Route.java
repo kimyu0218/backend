@@ -1,7 +1,5 @@
 package com.example.backend.dto;
 
-import java.util.Date;
-
 public class Route {
     private Double latitude;
     private Double longitude;
