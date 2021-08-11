@@ -3,6 +3,7 @@ package com.example.backend.etc;
 public class RouteForm {
     private double[][] path;
     private String[] instructions;
+
     public double[][] getPath() {
         return path;
     }
