@@ -17,6 +17,6 @@ public class DirectionSearchServiceTest {
         double src_latitude = 37.12345;
         double dst_longitude = 127.105399;
         double dst_latitude = 37.3595704;
-        directionSearchService.findRoute(auth, src_longitude, src_latitude, dst_longitude, dst_latitude);
+        directionSearchService.findRoute(1, auth, src_longitude, src_latitude, dst_longitude, dst_latitude);
     }
 }

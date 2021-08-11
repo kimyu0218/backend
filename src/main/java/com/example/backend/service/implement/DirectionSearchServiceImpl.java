@@ -61,7 +61,6 @@ public class DirectionSearchServiceImpl {
             cur_time[k] = Integer.parseInt(cur_time_arr[k]);
 
         // DB에서 신호 등화 순서 & 신호 등화 시간 가져오기 (위도: path[i][j][1] / 경도: path[i][j][0])
-        // System.out.println(path[i][j][1] + "," + path[i][j][0]); //
         List<TrafficLight> traffic_list = trafficLightDao.getTrafficLight(path[i][j][1], path[i][j][0]);
         System.out.println(i + "-" + j + ":\t" + traffic_list.size() + "개의 신호등 정보를 찾았습니다."); // (신호등 정보 찾았는지 확인용)
 
@@ -134,36 +133,40 @@ public class DirectionSearchServiceImpl {
     public void analyzeJson(JSONParser parser, int i, String content, double path[][][], long[][] point_value, double[] start_loc, double[] goal_loc) throws ParseException {
 
         Object obj = parser.parse(content);
-        JSONObject route = (JSONObject)((JSONObject)obj).get("route");
-        JSONObject trafast = (JSONObject)((JSONArray)route.get("trafast")).get(0);
-        JSONArray path_arr = (JSONArray)trafast.get("path");
-        JSONArray point_arr = (JSONArray)trafast.get("guide");
-        point_value[i] = new long[point_arr.size()];
-        path[i] = new double[point_arr.size()][2];
+        long code = (Long) ((JSONObject)obj).get("code");
 
-        for(int j = 0; j < point_arr.size(); j++) { // 해당 도로를 지나가는데 걸리는 시간
-            JSONObject tmpObj = (JSONObject)point_arr.get(j);
-            long index = (long)tmpObj.get("pointIndex");
-            point_value[i][j] = (long)tmpObj.get("duration");
+        if(code == 0) { // code : 0인 경우 (정상적으로 정보를 받아온 경우)
+            JSONObject route = (JSONObject) ((JSONObject) obj).get("route");
+            JSONObject trafast = (JSONObject) ((JSONArray) route.get("trafast")).get(0);
+            JSONArray path_arr = (JSONArray) trafast.get("path");
+            JSONArray point_arr = (JSONArray) trafast.get("guide");
+            point_value[i] = new long[point_arr.size()];
+            path[i] = new double[point_arr.size()][2];
 
-            JSONArray tmpArr = (JSONArray)path_arr.get((int)index);
-            path[i][j][0] = (double)tmpArr.get(0);
-            path[i][j][1] = (double)tmpArr.get(1);
-        }
+            for (int j = 0; j < point_arr.size(); j++) { // 해당 도로를 지나가는데 걸리는 시간
+                JSONObject tmpObj = (JSONObject) point_arr.get(j);
+                long index = (long) tmpObj.get("pointIndex");
+                point_value[i][j] = (long) tmpObj.get("duration");
 
-        if(i == 0) { // 처음 한 번만 저장
-            JSONObject loc = (JSONObject)trafast.get("summary");
-            JSONArray start = (JSONArray)((JSONObject)loc.get("start")).get("location");
-            JSONArray goal = (JSONArray)((JSONObject)loc.get("goal")).get("location");
-            start_loc[0] = (double)start.get(0);
-            start_loc[1] = (double)start.get(1);
-            goal_loc[0] = (double)goal.get(0);
-            goal_loc[1] = (double)goal.get(1);
+                JSONArray tmpArr = (JSONArray) path_arr.get((int) index);
+                path[i][j][0] = (double) tmpArr.get(0);
+                path[i][j][1] = (double) tmpArr.get(1);
+            }
+
+            if (i == 0) { // 처음 한 번만 저장
+                JSONObject loc = (JSONObject) trafast.get("summary");
+                JSONArray start = (JSONArray) ((JSONObject) loc.get("start")).get("location");
+                JSONArray goal = (JSONArray) ((JSONObject) loc.get("goal")).get("location");
+                start_loc[0] = (double) start.get(0);
+                start_loc[1] = (double) start.get(1);
+                goal_loc[0] = (double) goal.get(0);
+                goal_loc[1] = (double) goal.get(1);
+            }
         }
     }
 
     // 길찾기
-    public double[][] findRoute(int auth, double src_longitude, double src_latitude, double dst_longitude, double dst_latitude) throws IOException, ParseException {
+    public double[][] findRoute(int emergencyCarId, int auth, double src_longitude, double src_latitude, double dst_longitude, double dst_latitude) throws IOException, ParseException {
 
         String urlSrcDst = "?start=" + src_longitude + "," + src_latitude + "&goal=" + dst_longitude + "," + dst_latitude; // 출발지 및 도착지
         String urlWayPoints[] = new String[3]; // 경유지
@@ -211,6 +214,7 @@ public class DirectionSearchServiceImpl {
             br.close();
 
             content[i] = response.toString();
+            System.out.println(content[i]); // (추후에 삭제)
             analyzeJson(parser, i, content[i], path, point_value, start_loc, goal_loc);
         }
 
@@ -234,15 +238,9 @@ public class DirectionSearchServiceImpl {
                 minValue = cur_value;
                 minIndex = i;
             }
-            System.out.println(); // (추후에 삭제...)
         }
 
-        System.out.println("\n" + minIndex + "번째 경로가 최소 가중치 " + minValue + "를 가진다.");
-        /*  // 경로 출력용
-        System.out.println(start_loc[1] + ", " + start_loc[0]);
-        for(int i = 0; i < path[minIndex].length; i++)
-        	System.out.println("-> " + path[minIndex][i][1] + ", " + path[minIndex][i][0]);
-        */
+        System.out.println(minIndex + "번째 경로가 최소 가중치 " + minValue + "를 가진다.");
 
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Calendar cal = Calendar.getInstance();
@@ -251,7 +249,7 @@ public class DirectionSearchServiceImpl {
         if(auth==1) { // 응급 차량 경로 db에 저장
             int node_cnt = 0;
             Route element = new Route();
-            element.setEmergencyCarId(1); // ==== 일단 임의로 1로 설정 ==== (새로운 응급 차량이 들어올 때마다 id ++ 하는 식으로 구현 필요)
+            element.setEmergencyCarId(emergencyCarId);
             element.setLatitude(start_loc[1]);
             element.setLongitude(start_loc[0]); // 경로 시작점
             element.setNodeId(node_cnt++);
