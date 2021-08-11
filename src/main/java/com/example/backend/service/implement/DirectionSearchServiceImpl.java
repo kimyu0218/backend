@@ -7,12 +7,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import com.example.backend.etc.RouteForm;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -130,7 +130,7 @@ public class DirectionSearchServiceImpl {
     }
 
     // json 코드
-    public void analyzeJson(JSONParser parser, int i, String content, double path[][][], long[][] point_value, double[] start_loc, double[] goal_loc) throws ParseException {
+    public void analyzeJson(JSONParser parser, int i, String content, String instructions[][], double path[][][], long[][] point_value, double[] start_loc, double[] goal_loc) throws ParseException {
 
         Object obj = parser.parse(content);
         long code = (Long) ((JSONObject)obj).get("code");
@@ -142,11 +142,13 @@ public class DirectionSearchServiceImpl {
             JSONArray point_arr = (JSONArray) trafast.get("guide");
             point_value[i] = new long[point_arr.size()];
             path[i] = new double[point_arr.size()][2];
+            instructions[i] = new String[point_arr.size()];
 
             for (int j = 0; j < point_arr.size(); j++) { // 해당 도로를 지나가는데 걸리는 시간
                 JSONObject tmpObj = (JSONObject) point_arr.get(j);
                 long index = (long) tmpObj.get("pointIndex");
                 point_value[i][j] = (long) tmpObj.get("duration");
+                instructions[i][j] = (String) tmpObj.get("instructions");
 
                 JSONArray tmpArr = (JSONArray) path_arr.get((int) index);
                 path[i][j][0] = (double) tmpArr.get(0);
@@ -166,7 +168,7 @@ public class DirectionSearchServiceImpl {
     }
 
     // 길찾기
-    public double[][] findRoute(int emergencyCarId, int auth, double src_longitude, double src_latitude, double dst_longitude, double dst_latitude) throws IOException, ParseException {
+    public RouteForm findRoute(int emergencyCarId, int auth, double src_longitude, double src_latitude, double dst_longitude, double dst_latitude) throws IOException, ParseException {
 
         String urlSrcDst = "?start=" + src_longitude + "," + src_latitude + "&goal=" + dst_longitude + "," + dst_latitude; // 출발지 및 도착지
         String urlWayPoints[] = new String[3]; // 경유지
@@ -192,6 +194,7 @@ public class DirectionSearchServiceImpl {
         int route_cnt = 4;
         double[][][] path = new double[route_cnt][][];
         long[][] point_value = new long[route_cnt][];
+        String[][] instructions = new String[route_cnt][];
         double[] start_loc = new double[2];
         double[] goal_loc = new double[2];
 
@@ -214,8 +217,7 @@ public class DirectionSearchServiceImpl {
             br.close();
 
             content[i] = response.toString();
-            System.out.println(content[i]); // (추후에 삭제)
-            analyzeJson(parser, i, content[i], path, point_value, start_loc, goal_loc);
+            analyzeJson(parser, i, content[i], instructions, path, point_value, start_loc, goal_loc);
         }
 
         int max_size = -1;
@@ -266,6 +268,9 @@ public class DirectionSearchServiceImpl {
                 routeDao.insertRoute(element);
             }
         }
-        return path[minIndex]; // 최적 경로 반환
+        RouteForm form = new RouteForm();
+        form.setPath(path[minIndex]);
+        form.setInstructions(instructions[minIndex]);
+        return form; // 최적 경로 반환
     }
 }
