@@ -29,9 +29,8 @@ public class RestApiController { // 프론트엔드와 통신
     @Autowired
     RouteDao routeDao;
 
-    int giveId = 0; // (응급 차량마다 아이디 부여)
-
-    // Service (파라미터 형태)
+    int giveId = 0; // (응급 차량마다 아이디 부여하기 위함)
+    
     // 차량에게 최적의 경로 제공
     @PostMapping (value = "/api/drive")
     public RouteForm drive(@RequestParam ("auth") int auth,

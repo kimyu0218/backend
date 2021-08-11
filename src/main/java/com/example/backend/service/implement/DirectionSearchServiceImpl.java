@@ -174,7 +174,7 @@ public class DirectionSearchServiceImpl {
         String urlWayPoints[] = new String[3]; // 경유지
         String urlOption = "&option=trafast";  // 옵션
 
-        // (경유지 설정: 사분기마다)
+        // 경유지 설정
         double longitude_difference = dst_longitude - src_longitude;
         double latitude_difference = dst_latitude - src_latitude;
         for (int i = 0; i < 3; i++) {
@@ -191,7 +191,7 @@ public class DirectionSearchServiceImpl {
         URL url = new URL(option1);
         String[] content = new String[4];
 
-        int route_cnt = 4;
+        int route_cnt = 4; // (경우의 수)
         double[][][] path = new double[route_cnt][][];
         long[][] point_value = new long[route_cnt][];
         String[][] instructions = new String[route_cnt][];
@@ -199,7 +199,6 @@ public class DirectionSearchServiceImpl {
         double[] goal_loc = new double[2];
 
         JSONParser parser = new JSONParser();
-
         for (int i = 0; i < 4; i++) { // (경유지 없는 version 1개, 경유지 있는 version 3개)
 
             if (i != 0) url = new URL(option2[i - 1]); // url 재설정
@@ -212,8 +211,7 @@ public class DirectionSearchServiceImpl {
 
             String inputLine;
             StringBuffer response = new StringBuffer();
-            while ((inputLine = br.readLine()) != null)
-                response.append(inputLine);
+            while ((inputLine = br.readLine()) != null) response.append(inputLine);
             br.close();
 
             content[i] = response.toString();
@@ -248,7 +246,7 @@ public class DirectionSearchServiceImpl {
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
 
-        if(auth==1) { // 응급 차량 경로 db에 저장
+        if(auth==1) { // 응급 차량의 경로만 db에 저장
             int node_cnt = 0;
             Route element = new Route();
             element.setEmergencyCarId(emergencyCarId);
@@ -268,6 +266,8 @@ public class DirectionSearchServiceImpl {
                 routeDao.insertRoute(element);
             }
         }
+
+        // 최적 경로 제공 폼
         RouteForm form = new RouteForm();
         form.setPath(path[minIndex]);
         form.setInstructions(instructions[minIndex]);
