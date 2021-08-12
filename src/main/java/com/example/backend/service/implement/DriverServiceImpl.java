@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class DriverServiceImpl implements DriverService, Runnable{
+public class DriverServiceImpl implements DriverService {
 
     @Autowired
     private RouteDao routeDao;
@@ -22,20 +22,5 @@ public class DriverServiceImpl implements DriverService, Runnable{
         form.setLongitude(node.getLongitude());
         form.setTime(node.getTime());
         return form;
-    }
-
-    @Override
-    public void run() { // (불필요한 경우 추후에 삭제)
-        boolean con = true;
-        while(con){
-            findClosestNode();
-            try{ // 필요에 따라 sleep 위치 변경하기
-                Thread.sleep(5000);
-            } catch(InterruptedException e){
-                System.out.println(e.getMessage());
-            }
-            System.out.println("프론트엔드와 통신하기"); // ==== 프론트엔드와 통신 구현하기 ====
-            // 프론트엔드와 통신해서 continue 여부 결정하기
-        }
     }
 }

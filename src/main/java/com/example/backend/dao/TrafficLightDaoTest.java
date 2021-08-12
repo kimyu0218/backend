@@ -29,8 +29,8 @@ public class TrafficLightDaoTest {
         element.setTrafficOrder("녹색+황색+적색");
         element.setTrafficTime("20+3+52");
 
-        //int insertCount = trafficLightDao.insertTrafficInfo(element);
-        //System.out.println(insertCount + "개의 traffic 정보를 올렸습니다.");
+        int insertCount = trafficLightDao.insertTrafficInfo(element);
+        System.out.println(insertCount + "개의 traffic 정보를 올렸습니다.");
 
     }
 }

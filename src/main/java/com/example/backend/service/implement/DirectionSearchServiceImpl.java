@@ -64,7 +64,7 @@ public class DirectionSearchServiceImpl {
         List<TrafficLight> traffic_list = trafficLightDao.getTrafficLight(path[i][j][1], path[i][j][0]);
         System.out.println(i + "-" + j + ":\t" + traffic_list.size() + "개의 신호등 정보를 찾았습니다."); // (신호등 정보 찾았는지 확인용)
 
-        if(traffic_list.size() == 0) return -1; // ================신호등 정보가 없는 경우에는 어떤 값을 반환??================
+        if(traffic_list.size() == 0) return -1; // 일치하는 신호등 정보가 없는 경우
 
         String order =  traffic_list.get(0).getTrafficOrder(); // 임의로 한 개의 신호등 정보만 이용한다고 가정
         String time = traffic_list.get(0).getTrafficTime();

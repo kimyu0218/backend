@@ -8,7 +8,6 @@ import com.example.backend.dto.Route;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 public class RouteDaoTest {
     public static void main(String[] args) {
@@ -28,9 +27,8 @@ public class RouteDaoTest {
         System.out.println(insertCount + "개의 경로를 올렸습니다.");
 
         // 2. delete by time
-        int emergency_car_id = 1;
         String currentTime = format.format(new Date());
-        int deleteCount = routeDao.deleteRoute(emergency_car_id, currentTime);
+        int deleteCount = routeDao.deleteRoute(currentTime);
         System.out.println(deleteCount + "개의 경로를 삭제했습니다.");
 
         // 3. count

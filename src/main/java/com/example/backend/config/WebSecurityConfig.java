@@ -14,7 +14,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/api/drive").permitAll()
                 .antMatchers("/api/driver").permitAll()
-                .antMatchers("/api/emergency").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .csrf().disable();
