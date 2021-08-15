@@ -170,7 +170,10 @@ public class DirectionSearchServiceImpl {
     // 길찾기
     public RouteForm findRoute(int emergencyCarId, int auth, double src_longitude, double src_latitude, double dst_longitude, double dst_latitude) throws IOException, ParseException {
 
-        String urlSrcDst = "?start=" + src_longitude + "," + src_latitude + "&goal=" + dst_longitude + "," + dst_latitude; // 출발지 및 도착지
+        System.out.println("출발지: " + src_latitude + ", " + src_longitude);
+	System.out.println("목적지: " + dst_latitude + ", " + dst_longitude);
+	
+	String urlSrcDst = "?start=" + src_longitude + "," + src_latitude + "&goal=" + dst_longitude + "," + dst_latitude; // 출발지 및 도착지
         String urlWayPoints[] = new String[3]; // 경유지
         String urlOption = "&option=trafast";  // 옵션
 
@@ -224,7 +227,7 @@ public class DirectionSearchServiceImpl {
 			valid = false;
 
 	if(valid == false){
-	       	System.out.println("경로를 찾지 못했습니다");	
+	       	System.out.println("경로를 찾지 못했습니다\n");	
 		return null; 
 	}
 
@@ -248,9 +251,9 @@ public class DirectionSearchServiceImpl {
                 minValue = cur_value;
                 minIndex = i;
             }
+	    System.out.println(i + "번째 경로 가중치: " + cur_value); 
         }
-
-        System.out.println(minIndex + "번째 경로가 최소 가중치 " + minValue + "를 가집니다.");
+        System.out.println();
 
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Calendar cal = Calendar.getInstance();
