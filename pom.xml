@@ -80,7 +80,7 @@
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<version>8.0.26</version>
+			<version>5.1.39</version>
 		</dependency>
 		<!-- basic data source -->
 		<dependency>
@@ -126,12 +126,17 @@
 	</dependencies>
 	<build>
 		<plugins>
-			<!--
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<mainClass>com.example.BackendApplication</mainClass>
+						</manifest>
+					</archive>
+				</configuration>
 			</plugin>
-			-->
 		</plugins>
 	</build>
 </project>

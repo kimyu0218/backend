@@ -199,7 +199,7 @@ public class DirectionSearchServiceImpl {
         double[] goal_loc = new double[2];
 
         JSONParser parser = new JSONParser();
-        for (int i = 0; i < 4; i++) { // (경유지 없는 version 1개, 경유지 있는 version 3개)
+        for (int i = 0; i < route_cnt; i++) { // (경유지 없는 version 1개, 경유지 있는 version 3개)
 
             if (i != 0) url = new URL(option2[i - 1]); // url 재설정
             con = connectUrl(url);
@@ -218,11 +218,21 @@ public class DirectionSearchServiceImpl {
             analyzeJson(parser, i, content[i], instructions, path, point_value, start_loc, goal_loc);
         }
 
+	boolean valid = true;
+	for(int i = 0; i < route_cnt; i++) 
+		if(point_value[i] == null) 
+			valid = false;
+
+	if(valid == false){
+	       	System.out.println("경로를 찾지 못했습니다");	
+		return null; 
+	}
+
         int max_size = -1;
-        for(int i = 0; i < 4; i++)
+        for(int i = 0; i < route_cnt; i++)
             if(max_size < point_value[i].length) max_size = point_value[i].length;
 
-        int weight[][] = new int[4][max_size];
+        int weight[][] = new int[route_cnt][max_size];
 
         // 어떤 경로가 가장 적절한 경로인가
         long minValue = Integer.MAX_VALUE;
@@ -240,7 +250,7 @@ public class DirectionSearchServiceImpl {
             }
         }
 
-        System.out.println(minIndex + "번째 경로가 최소 가중치 " + minValue + "를 가진다.");
+        System.out.println(minIndex + "번째 경로가 최소 가중치 " + minValue + "를 가집니다.");
 
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Calendar cal = Calendar.getInstance();
